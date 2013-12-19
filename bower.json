@@ -1,0 +1,26 @@
+{
+  "name": "angular-downloadsvg-directive",
+  "main": "angular-downloadsvg-directive.js",
+  "version": "0.0.1",
+  "authors": [
+    "Hypercubed <hypercubed@gmail.com>"
+  ],
+  "description": "AngularJS directive to download SVGs.",
+  "keywords": [
+    "angularjs",
+    "svg",
+    "FileSaver",
+    "directive"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "FileSaver": "*"
+  }
+}
