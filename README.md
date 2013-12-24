@@ -11,7 +11,7 @@ AngularJS directive to download an svg element as an SVG file.
 
 ```html
 
-	<button svg-downloader label="Download svg" source="#chart" title="type.name" type="svg"></button>
+	<button svg-download="#chart" title="svg" type="svg">Download svg</button>
 ```
 
 ## Acknowledgments
