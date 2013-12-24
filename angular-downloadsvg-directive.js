@@ -42,7 +42,7 @@
         });
 
         function download(){
-          var filename = (encodeURI(attrs.title) || 'untitled') + ".svg";
+          var filename = encodeURI(attrs.filename) || (encodeURI(attrs.title) || 'untitled') + ".svg";
           if(!scope.source) return;
           svgDownload(scope.source).asSvg(filename);
         }
