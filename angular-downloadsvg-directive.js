@@ -20,10 +20,10 @@
       return {
         getHtml: function() { return html; },
         getBlob: function() { return blob; },
-        asSvg: function(filename) { saveAs(blob, filename) }
-      }
+        asSvg: function(filename) { saveAs(blob, filename); }
+      };
 
-    }
+    };
 
   });
 
