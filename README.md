@@ -10,7 +10,6 @@ AngularJS directive to download an svg element as an SVG file.
 ### As a directive
 
 ```html
-
 	<button svg-download="#chart" title="mysvg">Download svg</button>
 ```
 

@@ -1,6 +1,6 @@
 {
   "name": "angular-downloadsvg-directive",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "description": "AngularJS directive to download SVGs",
   "keywords": [
     "angularjs",
@@ -22,11 +22,11 @@
     "url": "https://github.com/Hypercubed/angular-downloadsvg-directive/issues"
   },
   "homepage": "https://github.com/Hypercubed/angular-downloadsvg-directive",
-  "dependencies": {
+  "devDependencies": {
     "grunt-contrib-uglify": "^0.4.0",
     "grunt-contrib-jshint": "^0.10.0",
-    "grunt-release": "^0.7.0",
     "load-grunt-tasks": "^0.4.0",
-    "grunt": "^0.4.4"
+    "grunt": "^0.4.4",
+    "grunt-bump": "0.0.13"
   }
 }
