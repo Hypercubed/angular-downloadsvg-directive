@@ -30,6 +30,10 @@ module.exports = function(grunt){
           '<%= pkg.name %>.min.js': '<%= pkg.name %>.js'
         }
       }
+    },
+
+    'gh-pages': {
+      src: ['<%= pkg.name %>.js','<%= pkg.name %>.min.js','bower_components/**/*','example/*']
     }
 
   });
@@ -38,6 +42,6 @@ module.exports = function(grunt){
 
   grunt.registerTask('default', ['build']);
   grunt.registerTask('build', ['jshint', 'uglify']);
-  grunt.registerTask('publish', ['jshint','bump-only','uglify','bump-commit']);
+  grunt.registerTask('publish', ['jshint','bump-only','uglify','bump-commit','gh-pages']);
 
 };
