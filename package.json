@@ -1,6 +1,6 @@
 {
   "name": "angular-downloadsvg-directive",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "AngularJS directive to download SVGs",
   "keywords": [
     "angularjs",
