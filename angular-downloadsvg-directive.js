@@ -22,7 +22,7 @@
         .attr("version", 1.1)
         .attr("xmlns", "http://www.w3.org/2000/svg");
 
-      var html = svg[0].outerHTML;
+      var html = svg[0].outerHTML || new XMLSerializer().serializeToString(svg[0]);
       var blob = new Blob([html], { type: "data:image/svg+xml" });
 
       return {
