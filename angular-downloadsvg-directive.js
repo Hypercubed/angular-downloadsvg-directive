@@ -1,5 +1,20 @@
 (function () {
 
+  var svgStyles = ['fill','stroke','stroke-width'];
+
+  function cloneWithStyle(src, only, except) {
+
+    var d = src.clone(false);
+    var od = src.find('*');
+
+    d.find('*').each(function(index, element) {
+      var source = $(od.get(index));
+      $(element).copyCSS(source, only, except);
+    });
+
+    return d;
+  }
+
   var app = angular.module('hc.downloader', []);
 
   // Losely based on code from https://github.com/densitydesign/raw/blob/master/js/directives.js
@@ -18,12 +33,14 @@
         return null;
       }
 
+      svg = cloneWithStyle(svg, svgStyles);
+
       svg
         .attr("version", 1.1)
         .attr("xmlns", "http://www.w3.org/2000/svg");
 
-      var html = svg[0].outerHTML || new XMLSerializer().serializeToString(svg[0]);
-      var blob = new Blob([html], { type: "data:image/svg+xml" });
+      var html = svg[0].outerHTML || (new XMLSerializer()).serializeToString(svg[0]);
+      var blob = new Blob([html], { type: "text/xml" });
 
       return {
         getHtml: function() { return html; },
