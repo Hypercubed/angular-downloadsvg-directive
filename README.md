@@ -1,5 +1,9 @@
-# angular-downloadsvg-directive
+angular-downloadsvg-directive [![Bower version](https://badge.fury.io/bo/angular-downloadsvg-directive.svg)](http://badge.fury.io/bo/angular-marked)
+===
+
 AngularJS directive to download an svg element as an SVG file.
+
+[![get this with bower](http://benschwarz.github.io/bower-badges/badge@2x.png)](http://bower.io/ "get this with bower")
 
 ## Usage
 1. `bower install Hypercubed/angular-downloadsvg-directive`
@@ -19,4 +23,6 @@ By default the downloaded file filename will be the title attribute plus ".svg".
 Based on code snippit from [raw](https://github.com/densitydesign/raw/blob/master/js/directives.js) by [densitydesign](https://github.com/densitydesign/).
 
 ## License
-MIT
+Copyright (c) 2013 Jayson Harshbarger
+
+[MIT License](http://en.wikipedia.org/wiki/MIT_License)
