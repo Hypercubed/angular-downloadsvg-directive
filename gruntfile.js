@@ -5,7 +5,7 @@ module.exports = function(grunt){
     pkg: grunt.file.readJSON('bower.json'),
 
     jshint: {
-      options: { jshintrc: true },
+      options: { jshintrc: true, force: true },
       all: ['gruntfile.js', '<%= pkg.name %>.js']
     },
 
@@ -33,15 +33,56 @@ module.exports = function(grunt){
     },
 
     'gh-pages': {
-      src: ['<%= pkg.name %>.js','<%= pkg.name %>.min.js','bower_components/**/*','example/*']
+      options: {
+        base: 'docs'
+      },
+      src: ['**']
+    },
+
+    ngdocs: {
+      options: {
+        html5Mode: false,
+        titleLink: "#/api/hc.downloader.directive:svgDownload",
+        startPage: '/api/hc.downloader.directive:svgDownload',
+        navTemplate: './docs-template/nav.html',
+        scripts: [
+          './bower_components/jquery/dist/jquery.js',
+          './bower_components/copycss/jquery.copycss.js',
+          './bower_components/FileSaver/FileSaver.js',
+          'angular.js',
+          './<%= pkg.name %>.js',
+          './docs-template/script.js',
+        ]
+      },
+      all: ['<%= pkg.name %>.js']
+    },
+
+    connect: {
+      server: {
+        options: {
+          port: 9001,
+          base: 'docs',
+          hostname: 'localhost',
+          open: true
+        }
+      }
+    },
+
+    watch: {
+      parser: {
+        files: ['<%= pkg.name %>.js','./docs-template/*.*'],
+        tasks: ['build']
+      }
     }
 
   });
 
   require('load-grunt-tasks')(grunt);
 
+  grunt.registerTask('serve', ['build','connect','watch']);
+
   grunt.registerTask('default', ['build']);
-  grunt.registerTask('build', ['jshint', 'uglify']);
+  grunt.registerTask('build', ['jshint', 'uglify', 'ngdocs']);
   grunt.registerTask('publish', ['jshint','bump-only','uglify','bump-commit','gh-pages']);
 
 };
