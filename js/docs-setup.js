@@ -21,6 +21,7 @@ NG_DOCS={
   "startPage": "/api/hc.downloader.directive:svgDownload",
   "scripts": [
     "jquery.js",
+    "jquery.copycss.js",
     "FileSaver.js",
     "angular.min.js",
     "angular-downloadsvg-directive.js",
