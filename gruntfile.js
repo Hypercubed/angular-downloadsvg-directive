@@ -47,7 +47,6 @@ module.exports = function(grunt){
         navTemplate: './docs-template/nav.html',
         scripts: [
           './bower_components/jquery/dist/jquery.js',
-          './bower_components/copycss/jquery.copycss.js',
           './bower_components/FileSaver/FileSaver.js',
           'angular.js',
           './<%= pkg.name %>.js',
