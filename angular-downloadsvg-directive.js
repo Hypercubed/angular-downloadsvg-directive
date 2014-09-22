@@ -7,9 +7,6 @@
 /* jshint undef: true, unused: true */
 /* global angular:true */
 /* global $:true */
-/* global Blob:true */
-/* global saveAs:true */
-/* global XMLSerializer:true */
 
 (function () {
 	'use strict';
@@ -87,7 +84,7 @@
 
       var d = src.clone(false);
 
-      if ($.fn.copyCSS == undefined) {
+      if ($.fn.copyCSS === undefined) {
         $log.warn('svgDownload Error: copyCSS is not available. Computed styles will not be copied.');
       } else {
         var od = src.find('*');
@@ -103,12 +100,12 @@
     function check() {
       var b = true;
 
-      if ($window.saveAs == undefined) {
+      if ($window.saveAs === undefined) {
         $log.warn('svgDownload Error: FileSaver not loaded.  See installation instructions.');
         b = false;
       }
 
-      if ($window.Blob == undefined) {
+      if ($window.Blob === undefined) {
         $log.warn('svgDownload Error: W3C Blob interface not available.  Try adding https://github.com/eligrey/Blob.js.');
         b = false;
       }
