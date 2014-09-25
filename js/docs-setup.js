@@ -21,7 +21,7 @@ NG_DOCS={
   "startPage": "/api/hc.downloader.directive:svgDownload",
   "discussions": {
     "shortName": "hypercubedgithub",
-    "url": "http://hypercubed.github.io/angular-downloadsvg-directive/#/",
+    "url": "http://hypercubed.github.io/angular-downloadsvg-directive",
     "dev": false
   },
   "scripts": [
