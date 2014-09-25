@@ -26,5 +26,10 @@ NG_DOCS={
     "angular.min.js",
     "angular-downloadsvg-directive.js",
     "script.js"
-  ]
+  ],
+  "discussions": {
+    "shortName": "hypercubedgithub",
+    "url": "http://hypercubed.github.io/angular-downloadsvg-directive/",
+    "dev": false
+  }
 };
