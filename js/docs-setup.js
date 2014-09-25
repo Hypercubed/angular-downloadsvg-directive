@@ -19,6 +19,11 @@ NG_DOCS={
   "html5Mode": false,
   "editExample": true,
   "startPage": "/api/hc.downloader.directive:svgDownload",
+  "discussions": {
+    "shortName": "hypercubedgithub",
+    "url": "http://hypercubed.github.io/angular-downloadsvg-directive/#/",
+    "dev": false
+  },
   "scripts": [
     "jquery.js",
     "jquery.copycss.js",
@@ -26,10 +31,5 @@ NG_DOCS={
     "angular.min.js",
     "angular-downloadsvg-directive.js",
     "script.js"
-  ],
-  "discussions": {
-    "shortName": "hypercubedgithub",
-    "url": "http://hypercubed.github.io/angular-downloadsvg-directive/#",
-    "dev": false
-  }
+  ]
 };
