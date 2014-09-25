@@ -52,7 +52,12 @@ module.exports = function(grunt){
           'angular.js',
           './<%= pkg.name %>.js',
           './docs-template/script.js',
-        ]
+        ],
+        discussions: {
+          shortName: 'hypercubedgithub',
+          url: 'http://hypercubed.github.io/<%= pkg.name %>/#',
+          dev: false
+        }
       },
       all: ['<%= pkg.name %>.js']
     },
@@ -83,6 +88,6 @@ module.exports = function(grunt){
 
   grunt.registerTask('default', ['build']);
   grunt.registerTask('build', ['jshint', 'uglify', 'ngdocs']);
-  grunt.registerTask('publish', ['jshint','bump-only','uglify','bump-commit','gh-pages']);
+  grunt.registerTask('publish', ['jshint','bump-only','uglify','bump-commit','ngdocs','gh-pages']);
 
 };
