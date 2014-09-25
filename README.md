@@ -7,7 +7,7 @@ AngularJS directive to download an svg element as an SVG file.
 
 ## Usage
 1. `bower install Hypercubed/angular-downloadsvg-directive`
-2. Include the `FileSaver.js` script into your app.  By default should be at `bower_components/FileSaver/FileSaver.js`.
+2. Include the `FileSaver.js` and `copycss` script into your app.  By default should be at `bower_components/FileSaver/FileSaver.js` and `bower_components/copycss/jquery.copycss.js`.
 3. Include the `angular-downloadsvg-directive.js` into your app.  By default should be at `bower_components/angular-downloadsvg-directive/angular-downloadsvg-directive.js`.
 4. Add `hc.downloader` as a module dependency to your app.
 
