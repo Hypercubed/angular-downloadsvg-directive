@@ -29,7 +29,7 @@ NG_DOCS={
   ],
   "discussions": {
     "shortName": "hypercubedgithub",
-    "url": "http://hypercubed.github.io/angular-downloadsvg-directive/",
+    "url": "http://hypercubed.github.io/angular-downloadsvg-directive/#",
     "dev": false
   }
 };
