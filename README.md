@@ -1,4 +1,4 @@
-angular-downloadsvg-directive [![Bower version](https://badge.fury.io/bo/angular-downloadsvg-directive.svg)](http://badge.fury.io/bo/angular-downloadsvg-directive)
+angular-downloadsvg-directive [![Bower version](https://badge.fury.io/bo/angular-downloadsvg-directive.png)](http://badge.fury.io/bo/angular-downloadsvg-directive)
 ===
 
 AngularJS directive to download an svg element as an SVG file, including CSS defined styles.
