@@ -7,8 +7,8 @@ AngularJS directive to download an svg element as an SVG file.
 
 ## Usage
 1. `bower install Hypercubed/angular-downloadsvg-directive`
-2. Include the `FileSaver.js` and `copycss` script into your app.  By default should be at `bower_components/FileSaver/FileSaver.js` and `bower_components/copycss/jquery.copycss.js`.
-3. Include the `angular-downloadsvg-directive.js` into your app.  By default should be at `bower_components/angular-downloadsvg-directive/angular-downloadsvg-directive.js`.
+2. Include the `FileSaver.js` in your app.  By default at `bower_components/FileSaver/FileSaver.js`.
+3. Include the `angular-downloadsvg-directive.js` in app.  By default at `bower_components/angular-downloadsvg-directive/angular-downloadsvg-directive.js`.
 4. Add `hc.downloader` as a module dependency to your app.
 
 ### As a directive
@@ -17,10 +17,10 @@ AngularJS directive to download an svg element as an SVG file.
 	<button svg-download="#chart" title="mysvg">Download svg</button>
 ```
 
-By default the downloaded file filename will be the title attribute plus ".svg".  An optional filename attribute can also be given.
+By default the downloaded file filename will be the title attribute plus ".svg".  An optional filename attribute can also be given. [See documentation](https://hypercubed.github.io/angular-downloadsvg-directive/#/api/hc.downloader.directive:svgDownload)
 
 ## Acknowledgments
-Based on code snippit from [raw](https://github.com/densitydesign/raw/blob/master/js/directives.js) by [densitydesign](https://github.com/densitydesign/).
+Some portions of this directive inspired by code from [raw](https://github.com/densitydesign/raw/blob/master/js/directives.js) and [moagrius/copycss](https://github.com/moagrius/copycss).
 
 ## License
 Copyright (c) 2013 Jayson Harshbarger
