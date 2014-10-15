@@ -1,7 +1,7 @@
 {
   "name": "angular-downloadsvg-directive",
   "main": "angular-downloadsvg-directive.js",
-  "version": "0.0.13",
+  "version": "0.0.15",
   "authors": [
     "Hypercubed <hypercubed@gmail.com>"
   ],

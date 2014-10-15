@@ -11,101 +11,101 @@
 (function () {
 	'use strict';
 
+	var svgStyles = {
+		'alignment-baseline':'auto',
+		'baseline-shift':'baseline',
+		'clip':'auto',
+		'clip-path':'none',
+		'clip-rule':'nonzero',
+		'color':'rgb(51, 51, 51)',
+		'color-interpolation':'srgb',
+		'color-interpolation-filters':'linearrgb',
+		'color-profile':'auto',
+		'color-rendering':'auto',
+		'cursor':'auto',
+		'direction':'ltr',
+		'display':'inline',
+		'dominant-baseline':'auto',
+		'enable-background':'accumulate',
+		'fill':'rgb(0, 0, 0)',
+		'fill-opacity':'1',
+		'fill-rule':'nonzero',
+		'filter':'none',
+		'flood-color':'rgb(0, 0, 0)',
+		'flood-opacity':'1',
+		'font':'',
+		'font-family':'',
+		'font-size':'medium',
+		'font-size-adjust':'none',
+		'font-stretch':'normal',
+		'font-style':'normal',
+		'font-variant':'normal',
+		'font-weight':'normal',
+		'glyph-orientation-horizontal':'0deg',
+		'glyph-orientation-vertical':'auto',
+		'image-rendering':'auto',
+		'kerning':'auto',
+		'letter-spacing':'normal',
+		'lighting-color':'rgb(255, 255, 255)',
+		'marker':'',
+		'marker-end':'none',
+		'marker-mid':'none',
+		'marker-start':'none',
+		'mask':'none',
+		'opacity':'1',
+		'overflow':'visible',
+		'pointer-events':'auto',
+		'shape-rendering':'auto',
+		'stop-color':'rgb(0, 0, 0)',
+		'stop-opacity':'1',
+		'stroke':'none',
+		'stroke-dasharray':'none',
+		'stroke-dashoffset':'0',
+		'stroke-linecap':'butt',
+		'stroke-linejoin':'miter',
+		'stroke-miterlimit':'4',
+		'stroke-opacity':'1',
+		'stroke-width':'1',
+		'text-anchor':'start',
+		'text-decoration':'none',
+		'text-rendering':'auto',
+		'unicode-bidi':'normal',
+		'visibility':'visible',
+		'word-spacing':'normal',
+		'writing-mode':'lr-tb'
+	};
+
+	function copyCSS(target, source, only) {
+		var styles = {};
+
+		angular.forEach(only, function(value, name) {
+			var src = source.css(name);
+			if (src !== value) {
+				styles[name] = src;
+			}
+		});
+
+		target.css(styles);
+	}
+
+	function cloneWithStyle(src, only) {
+
+		var d = src.clone(false);
+		var od = src.find('*');
+
+		d.find('*').each(function(index) {
+			var source = $(od.get(index));
+			var target = $(this);
+			copyCSS(target, source, only);
+		});
+
+		return d;
+	}
+
   angular.module('hc.downloader', [])
 
   // Losely based on code from https://github.com/densitydesign/raw/blob/master/js/directives.js
   .factory('svgDownload', ['$log', '$window', function($log, $window) {
-
-    var svgStyles = {
-      'alignment-baseline':'auto',
-      'baseline-shift':'baseline',
-      'clip':'auto',
-      'clip-path':'none',
-      'clip-rule':'nonzero',
-      'color':'rgb(51, 51, 51)',
-      'color-interpolation':'srgb',
-      'color-interpolation-filters':'linearrgb',
-      'color-profile':'auto',
-      'color-rendering':'auto',
-      'cursor':'auto',
-      'direction':'ltr',
-      'display':'inline',
-      'dominant-baseline':'auto',
-      'enable-background':'accumulate',
-      'fill':'rgb(0, 0, 0)',
-      'fill-opacity':'1',
-      'fill-rule':'nonzero',
-      'filter':'none',
-      'flood-color':'rgb(0, 0, 0)',
-      'flood-opacity':'1',
-      'font':'',
-      'font-family':'',
-      'font-size':'medium',
-      'font-size-adjust':'none',
-      'font-stretch':'normal',
-      'font-style':'normal',
-      'font-variant':'normal',
-      'font-weight':'normal',
-      'glyph-orientation-horizontal':'0deg',
-      'glyph-orientation-vertical':'auto',
-      'image-rendering':'auto',
-      'kerning':'auto',
-      'letter-spacing':'normal',
-      'lighting-color':'rgb(255, 255, 255)',
-      'marker':'',
-      'marker-end':'none',
-      'marker-mid':'none',
-      'marker-start':'none',
-      'mask':'none',
-      'opacity':'1',
-      'overflow':'visible',
-      'pointer-events':'auto',
-      'shape-rendering':'auto',
-      'stop-color':'rgb(0, 0, 0)',
-      'stop-opacity':'1',
-      'stroke':'none',
-      'stroke-dasharray':'none',
-      'stroke-dashoffset':'0',
-      'stroke-linecap':'butt',
-      'stroke-linejoin':'miter',
-      'stroke-miterlimit':'4',
-      'stroke-opacity':'1',
-      'stroke-width':'1',
-      'text-anchor':'start',
-      'text-decoration':'none',
-      'text-rendering':'auto',
-      'unicode-bidi':'normal',
-      'visibility':'visible',
-      'word-spacing':'normal',
-      'writing-mode':'lr-tb'
-    }
-
-    function copyCSS(target, source, only) {
-      var styles = {};
-
-      angular.forEach(only, function(value, name) {
-        var src = source.css(name);
-        if (src !== value) {
-          styles[name] = src;
-        }
-      });
-
-      target.css(styles);
-    }
-
-    function cloneWithStyle(src, only) {
-
-      var d = src.clone(false);
-      var od = src.find('*');
-
-      d.find('*').each(function(index) {
-        var source = $(od.get(index));
-        var target = $(this)
-        copyCSS(target, source, only);
-      });
-
-      return d;
-    }
 
     function check() {
       var b = true;
