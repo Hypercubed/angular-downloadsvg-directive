@@ -48,7 +48,8 @@ module.exports = function(grunt){
         scripts: [
           './bower_components/jquery/dist/jquery.js',
           './bower_components/FileSaver/FileSaver.js',
-          'angular.js',
+          './bower_components/angular/angular.js',
+          './bower_components/angular-animate/angular-animate.js',
           './<%= pkg.name %>.js',
           './docs-template/script.js',
         ],

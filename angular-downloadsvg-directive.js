@@ -11,7 +11,7 @@
 (function () {
 	'use strict';
 
-	var svgStyles = {
+	var svgStyles = {   // Whitelist of CSS stylkes and default values
 		'alignment-baseline':'auto',
 		'baseline-shift':'baseline',
 		'clip':'auto',
@@ -26,7 +26,7 @@
 		'direction':'ltr',
 		'display':'inline',
 		'dominant-baseline':'auto',
-		'enable-background':'accumulate',
+		'enable-background':'',
 		'fill':'rgb(0, 0, 0)',
 		'fill-opacity':'1',
 		'fill-rule':'nonzero',
@@ -34,18 +34,18 @@
 		'flood-color':'rgb(0, 0, 0)',
 		'flood-opacity':'1',
 		'font':'',
-		'font-family':'',
+		'font-family':'normal',
 		'font-size':'medium',
-		'font-size-adjust':'none',
+		'font-size-adjust':'auto',
 		'font-stretch':'normal',
 		'font-style':'normal',
 		'font-variant':'normal',
-		'font-weight':'normal',
+		'font-weight':"400",
 		'glyph-orientation-horizontal':'0deg',
 		'glyph-orientation-vertical':'auto',
 		'image-rendering':'auto',
 		'kerning':'auto',
-		'letter-spacing':'normal',
+		'letter-spacing':'0',
 		'lighting-color':'rgb(255, 255, 255)',
 		'marker':'',
 		'marker-end':'none',
@@ -71,16 +71,37 @@
 		'text-rendering':'auto',
 		'unicode-bidi':'normal',
 		'visibility':'visible',
-		'word-spacing':'normal',
+		'word-spacing':'0px',
 		'writing-mode':'lr-tb'
 	};
 
-	function copyCSS(target, source, only) {
+	var svgAttrs = [  // white list of attributes
+	  'id', 'xml:base', 'xml:lang', 'xml:space', // Core
+		'height', 'result', 'width', 'x', 'y',     // Primitive
+		'xlink:href',                              // Xlink attribute
+		'style','class',
+		'd','pathLength',                          // Path
+		'x','y','dx','dy','glyphRef','format',
+		'rotate','textLength',
+		'cx','cy','r',
+		'rx','ry',
+		'fx','fy',
+		'width','height',
+		'refx','refy','orient',
+		'markerUnits','markerWidth','markerHeight',
+		'maskUnits',
+		'transform',
+		'viewBox','version',											// Container
+		'preserveAspectRatio','xmlns'
+	];
+
+	function copyStyles(target, source) {
 		var styles = {};
 
-		angular.forEach(only, function(value, name) {
+		angular.forEach(svgStyles, function(value, name) {
 			var src = source.css(name);
-			if (src !== value) {
+			var par = source.parent().css(name);
+			if (src && src !== value && src !== par) {
 				styles[name] = src;
 			}
 		});
@@ -88,7 +109,21 @@
 		target.css(styles);
 	}
 
-	function cloneWithStyle(src, only) {
+	function getAttrs(elm) {
+		var attrs = [];
+
+		$(elm).each(function() {
+		  $.each(this.attributes, function() {
+		    if(this.specified && (svgStyles[this.name] || svgAttrs.indexOf(this.name) < 0)) {
+		      attrs.push(this.name);
+		    }
+		  });
+		});
+
+		return attrs.join(' ');
+	}
+
+	function cloneWithStyle(src) {
 
 		var d = src.clone(false);
 		var od = src.find('*');
@@ -96,8 +131,11 @@
 		d.find('*').each(function(index) {
 			var source = $(od.get(index));
 			var target = $(this);
-			copyCSS(target, source, only);
+			copyStyles(target, source);
+			target.removeAttr(getAttrs(this));
 		});
+
+		d.removeAttr(getAttrs(d));
 
 		return d;
 	}
