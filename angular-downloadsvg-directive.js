@@ -82,6 +82,7 @@
 		'style','class',
 		'd','pathLength',                          // Path
 		'x','y','dx','dy','glyphRef','format',
+		'x1','y1','x2','y2',
 		'rotate','textLength',
 		'cx','cy','r',
 		'rx','ry',
