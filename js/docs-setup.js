@@ -27,7 +27,8 @@ NG_DOCS={
   "scripts": [
     "jquery.js",
     "FileSaver.js",
-    "angular.min.js",
+    "angular.js",
+    "angular-animate.js",
     "angular-downloadsvg-directive.js",
     "script.js"
   ]
