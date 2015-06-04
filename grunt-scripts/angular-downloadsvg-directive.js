@@ -93,7 +93,8 @@
 		'maskUnits',
 		'transform',
 		'viewBox','version',											// Container
-		'preserveAspectRatio','xmlns'
+		'preserveAspectRatio','xmlns',
+		'points'				// Polygons
 	];
 
 	function copyStyles(target, source) {
