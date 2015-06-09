@@ -25,7 +25,6 @@ NG_DOCS={
     "dev": false
   },
   "scripts": [
-    "jquery.js",
     "FileSaver.js",
     "angular.js",
     "angular-animate.js",
