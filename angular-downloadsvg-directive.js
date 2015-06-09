@@ -6,7 +6,6 @@
 
 /* jshint undef: true, unused: true */
 /* global angular */
-/* global $ */
 /* global document */
 /* global window */
 
