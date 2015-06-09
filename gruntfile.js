@@ -46,7 +46,7 @@ module.exports = function(grunt){
         startPage: '/api/hc.downloader.directive:svgDownload',
         navTemplate: './docs-template/nav.html',
         scripts: [
-          './bower_components/jquery/dist/jquery.js',
+          //'./bower_components/jquery/dist/jquery.js',
           './bower_components/FileSaver/FileSaver.js',
           './bower_components/angular/angular.js',
           './bower_components/angular-animate/angular-animate.js',

@@ -5,8 +5,10 @@
  */
 
 /* jshint undef: true, unused: true */
-/* global angular:true */
-/* global $:true */
+/* global angular */
+/* global $ */
+/* global document */
+/* global window */
 
 (function () {
 	'use strict';
@@ -97,12 +99,26 @@
 		'points'				// Polygons
 	];
 
+	// adapted from https://github.com/angular/angular.js/issues/2866#issuecomment-31012434
+	function getStyles(node, name) {
+		var val;
+
+		if (angular.isDefined(node.currentStyle)) {  //for old IE
+			val = node.currentStyle[name];
+		} else if (angular.isDefined(window.getComputedStyle)){  //for modern browsers
+			val = node.ownerDocument.defaultView.getComputedStyle(node,null)[name];
+		} else {
+			val = node.style[name];
+		}
+		return  (val === '') ? undefined : val;
+	}
+
 	function copyStyles(target, source) {
 		var styles = {};
 
 		angular.forEach(svgStyles, function(value, name) {
-			var src = source.css(name);
-			var par = source.parent().css(name);
+			var src = getStyles(source[0],name);
+			var par = getStyles(source.parent()[0], name);
 			if (src && src !== value && src !== par) {
 				styles[name] = src;
 			}
@@ -111,13 +127,15 @@
 		target.css(styles);
 	}
 
-	function getAttrs(elm) {
+	function getAttrs(elms) {
 		var attrs = [];
 
-		$(elm).each(function() {
-		  $.each(this.attributes, function() {
-		    if(this.specified && (svgStyles[this.name] || svgAttrs.indexOf(this.name) < 0)) {
-		      attrs.push(this.name);
+		elms = angular.element(elms);
+
+		angular.forEach(elms, function(elm) {
+			angular.forEach(elm.attributes, function(attr) {
+		    if(attr.specified && (svgStyles[attr.name] || svgAttrs.indexOf(attr.name) < 0)) {
+		      attrs.push(attr.name);
 		    }
 		  });
 		});
@@ -128,13 +146,13 @@
 	function cloneWithStyle(src) {
 
 		var d = src.clone(false);
-		var od = src.find('*');
+		var od = src.children();
 
-		d.find('*').each(function(index) {
-			var source = $(od.get(index));
-			var target = $(this);
+		angular.forEach(d.children(), function(elm, index) {
+			var source = angular.element(od[index]);
+			var target = angular.element(elm);
 			copyStyles(target, source);
-			target.removeAttr(getAttrs(this));
+			target.removeAttr(getAttrs(elm));
 		});
 
 		d.removeAttr(getAttrs(d));
@@ -167,6 +185,10 @@
 
     return function(el) {
       if (!check()) { return; }
+
+			if (angular.isString(el) && el.charAt(0) != '<') {
+				el = document.querySelector(el);
+			}
 
       var svg = angular.element(el);
 
