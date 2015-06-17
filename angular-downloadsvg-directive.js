@@ -145,9 +145,9 @@
 	function cloneWithStyle(src) {
 
 		var d = src.clone(false);
-		var od = src.children();
+		var od = src.find('*');
 
-		angular.forEach(d.children(), function(elm, index) {
+		angular.forEach(d.find('*'), function(elm, index) {
 			var source = angular.element(od[index]);
 			var target = angular.element(elm);
 			copyStyles(target, source);
