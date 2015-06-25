@@ -8,6 +8,8 @@
 /* global angular */
 /* global document */
 /* global window */
+/* global require */
+/* global saveAs */
 
 (function () {
 	'use strict';
@@ -171,8 +173,6 @@
 		return saveAs;
 	})();
 
-	var _Blob = $window.Blob || Blob;
-
 	function check() {
 		var b = true;
 
@@ -181,7 +181,7 @@
 			b = false;
 		}
 
-		if (angular.isUndefined(_Blob)) {
+		if (angular.isUndefined($window.Blob)) {
 			$log.warn('svgDownload Error: W3C Blob interface not available.  Try adding https://github.com/eligrey/Blob.js.');
 			b = false;
 		}
@@ -216,7 +216,7 @@
 			.attr("xmlns", "http://www.w3.org/2000/svg");
 
 		var html = svg[0].outerHTML || (new $window.XMLSerializer()).serializeToString(svg[0]);
-		var blob = new _Blob([html], { type: "text/xml" });
+		var blob = new $window.Blob([html], { type: "text/xml" });
 
 		return {
 			getHtml: function() { return html; },
