@@ -91,7 +91,7 @@
 		'rx','ry',
 		'fx','fy',
 		'width','height',
-		'refx','refy','orient',
+		'refX','refY','orient',
 		'markerUnits','markerWidth','markerHeight',
 		'maskUnits',
 		'transform',
