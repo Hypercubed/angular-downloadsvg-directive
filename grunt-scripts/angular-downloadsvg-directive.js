@@ -79,7 +79,7 @@
 	};
 
 	var svgAttrs = [  // white list of attributes
-	  'id', 'xml:base', 'xml:lang', 'xml:space', // Core
+		'id', 'xml:base', 'xml:lang', 'xml:space', // Core
 		'height', 'result', 'width', 'x', 'y',     // Primitive
 		'xlink:href',                              // Xlink attribute
 		'style','class',
@@ -97,7 +97,8 @@
 		'transform',
 		'viewBox','version',											// Container
 		'preserveAspectRatio','xmlns',
-		'points'				// Polygons
+		'points',				// Polygons
+		'offset'
 	];
 
 	// adapted from https://github.com/angular/angular.js/issues/2866#issuecomment-31012434
@@ -128,17 +129,19 @@
 		target.css(styles);
 	}
 
-	function getAttrs(elms) {
+	function getAttrs(elms) {  // gets list of attributes to remove
 		var attrs = [];
 
 		elms = angular.element(elms);
 
 		angular.forEach(elms, function(elm) {
 			angular.forEach(elm.attributes, function(attr) {
-			if(attr.specified && (svgStyles[attr.name] || svgAttrs.indexOf(attr.name) < 0)) {
-			  attrs.push(attr.name);
-			}
-		  });
+				// remove if it is not style nor on whitelist
+				// keeping attributes that are also styles because some styles are not copied
+				if(attr.specified && angular.isUndefined(svgStyles[attr.name]) && svgAttrs.indexOf(attr.name) < 0) {
+					attrs.push(attr.name);
+				}
+			});
 		});
 
 		return attrs.join(' ');
