@@ -8,3 +8,5 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [x] Copy css, is it possible?
 - [ ] vkbeautify.xml?
 - [ ] image download
+- [ ] remove jquery dependency
+- [ ] create standalone module (not dep on angular)
