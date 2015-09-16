@@ -57,6 +57,7 @@
 		'mask':'none',
 		'opacity':'1',
 		'overflow':'visible',
+		'paint-order': 'normal',
 		'pointer-events':'auto',
 		'shape-rendering':'auto',
 		'stop-color':'rgb(0, 0, 0)',
