@@ -2,7 +2,7 @@ module.exports = function(grunt){
   'use strict';
 
   grunt.initConfig({
-    pkg: grunt.file.readJSON('bower.json'),
+    pkg: grunt.file.readJSON('package.json'),
 
     jshint: {
       options: { jshintrc: true, force: true },
@@ -12,7 +12,7 @@ module.exports = function(grunt){
     uglify: {
       options: {
         banner: '/*\n * <%= pkg.title || pkg.name %> <%= pkg.version %>\n' +
-          ' * (c) <%= grunt.template.today("yyyy") %> <%= pkg.authors.join(" ") %>\n' +
+          ' * (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
           ' * Licensed <%= pkg.license %>\n */\n'
       },
       src: {
