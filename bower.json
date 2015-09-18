@@ -1,7 +1,6 @@
 {
   "name": "angular-downloadsvg-directive",
   "main": "angular-downloadsvg-directive.js",
-  "version": "0.0.28",
   "authors": [
     "Hypercubed <hypercubed@gmail.com>"
   ],
@@ -22,8 +21,7 @@
   ],
   "dependencies": {
     "FileSaver": "*",
-    "angular": ">= 1.2.5",
-    "jquery": ">= 1.11.0"
+    "angular": ">= 1.2.5"
   },
   "devDependencies": {
     "angular-animate": "~1.3.0"

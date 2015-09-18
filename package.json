@@ -10,7 +10,9 @@
   ],
   "main": "angular-downloadsvg-directive.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "grunt build",
+    "version": "npm run build && git add -A *.min.js"
   },
   "repository": {
     "type": "git",

@@ -9,16 +9,6 @@ module.exports = function(grunt){
       all: ['gruntfile.js', '<%= pkg.name %>.js']
     },
 
-    bump: {
-      options: {
-        files: ['bower.json','package.json'],
-        commit: true,
-        commitMessage: 'release %VERSION%',
-        commitFiles: ['package.json','bower.json','<%= pkg.name %>.min.js'],
-        pushTo: 'origin',
-      }
-    },
-
     uglify: {
       options: {
         banner: '/*\n * <%= pkg.title || pkg.name %> <%= pkg.version %>\n' +
@@ -46,7 +36,6 @@ module.exports = function(grunt){
         startPage: '/api/hc.downloader.directive:svgDownload',
         navTemplate: './docs-template/nav.html',
         scripts: [
-          //'./bower_components/jquery/dist/jquery.js',
           './bower_components/FileSaver/FileSaver.js',
           './bower_components/angular/angular.js',
           './bower_components/angular-animate/angular-animate.js',
@@ -88,6 +77,6 @@ module.exports = function(grunt){
 
   grunt.registerTask('default', ['build']);
   grunt.registerTask('build', ['jshint', 'uglify', 'ngdocs']);
-  grunt.registerTask('publish', ['jshint','bump-only','uglify','bump-commit','ngdocs','gh-pages']);
+  grunt.registerTask('publish', ['build','gh-pages']);
 
 };
