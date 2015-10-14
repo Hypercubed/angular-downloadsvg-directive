@@ -1,7 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*
  * angular-downloadsvg-directive
- * (c) 2014 J. Harshbarger
+ * (c) 2013-2015 J. Harshbarger
  * Licensed MIT
  */
 
@@ -11,11 +11,11 @@
 /* global document */
 
 var SvgSaver = require('svgsaver');
-var svgSaver = new SvgSaver();
 
 angular.module('hc.downloader', [])
-	// Losely based on code from https://github.com/densitydesign/raw/blob/master/js/directives.js
-	.factory('svgDownload', ['$log', '$document', function($log, $document) {
+	.factory('svgDownload', ['$log', function($log) {
+
+		var svgSaver = new SvgSaver();
 
 		return function(el) {
 
@@ -37,7 +37,8 @@ angular.module('hc.downloader', [])
 			return {
 				getHtml: function() { return svgSaver.getHTML(svg[0]); },
 				getBlob: function() { return svgSaver.getBlob(svg[0]); },
-				asSvg: function(filename) { return svgSaver.asSvg(svg[0],filename); }
+				asSvg: function(filename) { return svgSaver.asSvg(svg[0],filename); },
+				asPng: function(filename) { return svgSaver.asPng(svg[0],filename); }
 			};
 
 		};
@@ -55,6 +56,7 @@ angular.module('hc.downloader', [])
 	 *
 	 * @param {string} svg-download The source element to download.  If blank uses the first svg in the body.
 	 * @param {string=} filename Name of resaulting svg file.  If blank uses title or 'untitled.svg'
+	 * @param {string} [type='svg'] Type of file to download (svg or png)
 	 *
 	 * @example
 
@@ -63,7 +65,8 @@ angular.module('hc.downloader', [])
 	  <example module="hc.downloader">
 		<file name="example.html">
 		  <div ng-include="'octocat.html'"></div>
-		  <button svg-download title="mysvg">Download svg</button>
+			  <button svg-download title="mysvg">Download as SVG</button>
+			  <button svg-download title="mysvg" type="png">Download as PNG</button>
 		  <small class="pull-right">Source: <a href="https://gist.github.com/johan/1007813">https://gist.github.com/johan/1007813</a></small>
 		</file>
 		<file name="octocat.html">
@@ -105,9 +108,13 @@ angular.module('hc.downloader', [])
 				element.on('click', download);
 
 				function download(){
-				  var filename = encodeURI(attrs.filename || attrs.title || 'untitled') + ".svg";
+					var ext = attrs.type || 'svg';
+				  var filename = encodeURI(attrs.filename || attrs.title || 'untitled') + '.' + ext;
 				  var svg = svgDownload(attrs.svgDownload || 'body');
-				  if(svg) { svg.asSvg(filename); }
+					if (svg) {
+						if(ext === 'svg') { svg.asSvg(filename); }
+						if(ext === 'png') { svg.asPng(filename); }
+					}
 				}
 
 		  }
