@@ -4,24 +4,6 @@ module.exports = function(grunt){
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    jshint: {
-      options: { jshintrc: true, force: true },
-      all: ['gruntfile.js', '<%= pkg.name %>.js']
-    },
-
-    uglify: {
-      options: {
-        banner: '/*\n * <%= pkg.title || pkg.name %> <%= pkg.version %>\n' +
-          ' * (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
-          ' * Licensed <%= pkg.license %>\n */\n'
-      },
-      src: {
-        files: {
-          '<%= pkg.name %>.min.js': '<%= pkg.name %>.js'
-        }
-      }
-    },
-
     'gh-pages': {
       options: {
         base: 'docs'
@@ -48,7 +30,7 @@ module.exports = function(grunt){
           dev: false
         }
       },
-      all: ['<%= pkg.name %>.js']
+      all: ['lib/<%= pkg.name %>.js']
     },
 
     connect: {
@@ -65,7 +47,7 @@ module.exports = function(grunt){
     watch: {
       parser: {
         files: ['<%= pkg.name %>.js','./docs-template/*.*'],
-        tasks: ['build']
+        tasks: ['ngdocs']
       }
     }
 
@@ -73,10 +55,7 @@ module.exports = function(grunt){
 
   require('load-grunt-tasks')(grunt);
 
-  grunt.registerTask('serve', ['build','connect','watch']);
-
-  grunt.registerTask('default', ['build']);
-  grunt.registerTask('build', ['jshint', 'uglify', 'ngdocs']);
-  grunt.registerTask('publish', ['build','gh-pages']);
+  grunt.registerTask('serve', ['ngdocs','connect','watch']);
+  grunt.registerTask('publish', ['ngdocs','gh-pages']);
 
 };
