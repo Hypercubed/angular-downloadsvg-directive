@@ -9,12 +9,14 @@
 <h2 id="usage">Usage</h2>
 <div class="usage">as attribute<pre class="prettyprint linenums">&lt;button svg-download
      svg-download="{string}"
-     [filename="{string}"]&gt;
+     [filename="{string}"]
+     type="{string}"&gt;
    ...
 &lt;/button&gt;</pre>
-<h4 id="usage_parameters">Parameters</h4><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>svg-download</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="hc-downloader-directive-page hc-downloader-directive-svgdownload-page"><p>The source element to download.  If blank uses the first svg in teh body.</p>
+<h4 id="usage_parameters">Parameters</h4><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>svg-download</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="hc-downloader-directive-page hc-downloader-directive-svgdownload-page"><p>The source element to download.  If blank uses the first svg in the body.</p>
 </div></td></tr><tr><td>filename <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="hc-downloader-directive-page hc-downloader-directive-svgdownload-page"><p>Name of resaulting svg file.  If blank uses title or &#39;untitled.svg&#39;</p>
-</div></td></tr></tbody></table></div>
+</div></td></tr><tr><td>type</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="hc-downloader-directive-page hc-downloader-directive-svgdownload-page"><p>Type of file to download (svg or png)</p>
+</div> <p><em>(default: 'svg')</em></p></td></tr></tbody></table></div>
 <h2 id="example">Example</h2>
 <div class="example"><div class="hc-downloader-directive-page hc-downloader-directive-svgdownload-page"><h4 id="example_a-simple-example">A simple example</h4>
 <p> <h4 id="example_source">Source</h4>
@@ -23,7 +25,8 @@
 <pre class="prettyprint linenums" ng-set-text="example.html"></pre>
 <script type="text/ng-template" id="example.html">
   <div ng-include="'octocat.html'"></div>
-  <button svg-download title="mysvg">Download svg</button>
+	  <button svg-download title="mysvg">Download as SVG</button>
+	  <button svg-download title="mysvg" type="png">Download as PNG</button>
   <small class="pull-right">Source: <a href="https://gist.github.com/johan/1007813">https://gist.github.com/johan/1007813</a></small>
 </script>
 </div>
