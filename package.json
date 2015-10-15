@@ -14,7 +14,6 @@
     "browserify": "browserify ./lib/angular-downloadsvg-directive.js -o angular-downloadsvg-directive.js",
     "uglify": "uglifyjs angular-downloadsvg-directive.js -o angular-downloadsvg-directive.min.js",
     "build": "npm run browserify && npm run uglify && grunt ngdocs",
-    "version": "npm run build && git add angular-downloadsvg-directive.min.js",
     "lint": "jshint lib/angular-downloadsvg-directive.js"
   },
   "repository": {
