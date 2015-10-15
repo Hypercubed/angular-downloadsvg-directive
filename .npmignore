@@ -1,0 +1,5 @@
+*
+!lib/*
+!angular-downloadsvg-directive.*
+!README.md
+!package.json
