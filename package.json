@@ -11,8 +11,8 @@
   "main": "lib/angular-downloadsvg-directive.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "browserify": "browserify ./lib/angular-downloadsvg-directive.js -o angular-downloadsvg-directive.js",
-    "uglify": "uglifyjs angular-downloadsvg-directive.js -o angular-downloadsvg-directive.min.js",
+    "browserify": "browserify ./lib/angular-downloadsvg-directive.js -d  | exorcist angular-downloadsvg-directive.js.map > angular-downloadsvg-directive.js",
+    "uglify": "uglifyjs angular-downloadsvg-directive.js -o angular-downloadsvg-directive.min.js --in-source-map angular-downloadsvg-directive.js.map --source-map angular-downloadsvg-directive.min.js.map",
     "build": "npm run browserify && npm run uglify && grunt ngdocs",
     "lint": "jshint lib/angular-downloadsvg-directive.js"
   },
@@ -28,6 +28,7 @@
   "homepage": "https://github.com/Hypercubed/angular-downloadsvg-directive",
   "devDependencies": {
     "browserify": "^11.2.0",
+    "exorcist": "^0.4.0",
     "grunt": "^0.4.4",
     "grunt-bump": "0.0.13",
     "grunt-contrib-connect": "^0.8.0",
