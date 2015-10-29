@@ -26,6 +26,7 @@ NG_DOCS={
   },
   "scripts": [
     "FileSaver.js",
+    "canvas-toBlob.js",
     "angular.js",
     "angular-animate.js",
     "angular-downloadsvg-directive.js",
