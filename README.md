@@ -3,9 +3,9 @@ angular-downloadsvg-directive
 
 AngularJS directive to download an SVG element as an SVG or PNG file, including CSS defined styles.
 
-[![Bower version](https://img.shields.io/bower/v/angular-downloadsvg-directive.svg)](https://www.npmjs.com/package/mini-signals)
-[![NPM](https://img.shields.io/npm/v/angular-downloadsvg-directive.svg)](https://www.npmjs.com/package/mini-signals)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Hypercubed/mini-signals/blob/master/LICENSE)
+[![Bower version](https://img.shields.io/bower/v/angular-downloadsvg-directive.svg)](http://bower.io/)
+[![NPM](https://img.shields.io/npm/v/angular-downloadsvg-directive.svg)](https://www.npmjs.com/package/angular-downloadsvg-directive)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://en.wikipedia.org/wiki/MIT_License)
 
 ## Features
 
@@ -14,6 +14,7 @@ AngularJS directive to download an SVG element as an SVG or PNG file, including 
 - Download `<svg>` by element or selector.
 - Copies SVG element styles as rendered in the browser, including styles defined in Cascading Style Sheets (CSS).
 - Copies only SVG relevant and non-default styles.  [See here](http://www.w3.org/TR/SVG/propidx.html).
+- Computed styles are in-lined for maximum compatibility.
 
 ## Install
 
