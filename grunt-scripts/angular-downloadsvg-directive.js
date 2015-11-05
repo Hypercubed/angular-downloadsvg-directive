@@ -169,7 +169,7 @@ var svgStyles = { // Whitelist of CSS styles and default values
   'mask': 'none',
   'opacity': '1',
   'overflow': 'visible',
-  'paint-order': 'normal',
+  'paint-order': 'fill',
   'pointer-events': 'auto',
   'shape-rendering': 'auto',
   'stop-color': 'rgb(0, 0, 0)',
@@ -192,9 +192,9 @@ var svgStyles = { // Whitelist of CSS styles and default values
 };
 
 var svgAttrs = [// white list of attributes
-'id', 'xml:base', 'xml:lang', 'xml:space', // Core
+'id', 'xml: base', 'xml: lang', 'xml: space', // Core
 'height', 'result', 'width', 'x', 'y', // Primitive
-'xlink:href', // Xlink attribute
+'xlink: href', // Xlink attribute
 'style', 'class', 'd', 'pathLength', // Path
 'x', 'y', 'dx', 'dy', 'glyphRef', 'format', 'x1', 'y1', 'x2', 'y2', 'rotate', 'textLength', 'cx', 'cy', 'r', 'rx', 'ry', 'fx', 'fy', 'width', 'height', 'refX', 'refY', 'orient', 'markerUnits', 'markerWidth', 'markerHeight', 'maskUnits', 'transform', 'viewBox', 'version', // Container
 'preserveAspectRatio', 'xmlns', 'points', // Polygons
@@ -216,11 +216,10 @@ var isUndefined = function isUndefined(a) {
   return typeof a === 'undefined';
 };
 
-//detection
+// detection
 var DownloadAttributeSupport = typeof document !== 'undefined' && 'download' in document.createElement('a');
 
 function saveUri(uri, name) {
-
   if (DownloadAttributeSupport) {
     var dl = document.createElement('a');
     dl.setAttribute('href', uri);
@@ -260,18 +259,33 @@ function savePng(uri, name) {
 var _isDefined = function _isDefined(a) {
   return typeof a !== 'undefined';
 };
-var isObject = function isObject(a) {
+var _isUndefined = function _isUndefined(a) {
+  return typeof a === 'undefined';
+};
+var _isObject = function _isObject(a) {
   return a !== null && typeof a === 'object';
 };
 
 // from https://github.com/npm-dom/is-dom/blob/master/index.js
 function isNode(val) {
-  if (!isObject(val)) return false;
-  if (_isDefined(window) && isObject(window.Node)) return val instanceof window.Node;
+  if (!_isObject(val)) return false;
+  if (_isDefined(window) && _isObject(window.Node)) return val instanceof window.Node;
   return 'number' == typeof val.nodeType && 'string' == typeof val.nodeName;
 }
 
 var useComputedStyles = _isDefined(window) && _isDefined(window.getComputedStyle);
+
+// Gets computed styles for an element
+// from https://github.com/jquery/jquery/blob/master/src/css/var/getStyles.js
+function getComputedStyles(node) {
+  if (useComputedStyles) {
+    var view = node.ownerDocument.defaultView;
+    if (!view.opener) view = window;
+    return view.getComputedStyle(node, null);
+  } else {
+    return node.currentStyle || node.style;
+  }
+}
 
 /**
 * Returns a collection of CSS property-value pairs
@@ -291,18 +305,25 @@ function computedStyles(node) {
 
   if (styleList === false) return target;
 
-  if (useComputedStyles) {
-    var computed = node.ownerDocument.defaultView.getComputedStyle(node, null);
-    var keysArray = styleList === true ? computed : Object.keys(styleList);
+  var computed = getComputedStyles(node);
+
+  if (styleList === true) {
+    var keysArray = useComputedStyles ? computed : Object.keys(computed);
   } else {
-    var computed = _isDefined(node.currentStyle) ? node.currentStyle : node.style;
-    var keysArray = styleList === true ? Object.keys(computed) : Object.keys(styleList);
+    var keysArray = Object.keys(styleList);
   }
 
   for (var i = 0, l = keysArray.length; i < l; i++) {
     var key = keysArray[i];
-    var value = useComputedStyles ? computed.getPropertyValue(key) : computed[key];
-    if (styleList === true || styleList[key] === true || value !== styleList[key]) {
+
+    var def = styleList === true || styleList[key];
+    if (def === false || _isUndefined(def)) continue; // copy never
+
+    var value = /* computed.getPropertyValue(key) || */computed[key]; // using getPropertyValue causes error in IE11
+    if (typeof value !== 'string' || value === '') continue; // invalid value
+
+    if (def === true || value !== def) {
+      // styleList === true || styleList[key] === true || styleList[key] !== value
       target[key] = value;
     }
   }
@@ -328,18 +349,38 @@ function cleanAttrs(el, attrs, styles) {
   });
 }
 
-// Clones an SVGElement, copyies approprate atttributes and styles.
+function cleanStyle(tgt, parentStyles) {
+  if (tgt.style) {
+    inheritableAttrs.forEach(function (key) {
+      if (tgt.style[key] === parentStyles[key]) {
+        tgt.style.removeProperty(key);
+      }
+    });
+  }
+}
+
+function walker(attrs, defaultStyles) {
+  return function walk(src, tgt) {
+    if (!tgt.style) return;
+
+    computedStyles(src, tgt.style, defaultStyles);
+
+    var children = src.childNodes;
+    for (var i = 0; i < children.length; i++) {
+      walk(children[i], tgt.childNodes[i]);
+      cleanStyle(tgt.childNodes[i], tgt.style);
+    }
+
+    if (tgt.attributes) {
+      cleanAttrs(tgt, attrs, defaultStyles);
+    }
+  };
+}
+
+// Clones an SVGElement, copies approprate atttributes and styles.
 function cloneSvg(src, attrs, styles) {
   var clonedSvg = src.cloneNode(true);
-  var srcChildren = src.querySelectorAll('*');
-
-  computedStyles(src, clonedSvg.style, styles);
-  cleanAttrs(clonedSvg, attrs, styles);
-
-  Array.prototype.slice.call(clonedSvg.querySelectorAll('*')).forEach(function (target, index) {
-    computedStyles(srcChildren[index], target.style, styles);
-    cleanAttrs(target, attrs, styles);
-  });
+  walker(attrs, styles)(src, clonedSvg);
 
   return clonedSvg;
 }
