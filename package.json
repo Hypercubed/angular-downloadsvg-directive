@@ -15,7 +15,7 @@
     "uglify": "uglifyjs angular-downloadsvg-directive.js -o angular-downloadsvg-directive.min.js",
     "build": "npm run browserify && npm run uglify && grunt ngdocs",
     "lint": "semistandard ./lib/",
-    "start": "grunt serve",
+    "start": "npm run build && grunt serve",
     "check": "npm run lint && dependency-check package.json --entry lib/angular-downloadsvg-directive.js"
   },
   "repository": {
@@ -42,6 +42,6 @@
     "uglifyjs": "^2.4.10"
   },
   "dependencies": {
-    "svgsaver": "^0.3.3"
+    "svgsaver": "^0.4.0"
   }
 }
