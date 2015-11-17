@@ -205,8 +205,12 @@ var isObject = function isObject(a) {
 
 // from https://github.com/npm-dom/is-dom/blob/master/index.js
 function isNode(val) {
-  if (!isObject(val)) return false;
-  if (isDefined(window) && isObject(window.Node)) return val instanceof window.Node;
+  if (!isObject(val)) {
+    return false;
+  }
+  if (isDefined(window) && isObject(window.Node)) {
+    return val instanceof window.Node;
+  }
   return typeof val.nodeType === 'number' && typeof val.nodeName === 'string';
 }
 
@@ -390,6 +394,28 @@ inheritableAttrs.forEach(function (k) {
   }
 });
 
+function getSvg(el) {
+  if (isUndefined(el) || el === '') {
+    el = document.body.querySelector('svg');
+  } else if (typeof el === 'string') {
+    el = document.body.querySelector(el);
+  }
+  if (el && el.tagName !== 'svg') {
+    el = el.querySelector('svg');
+  }
+  if (!isNode(el)) {
+    throw new Error('svgsaver: Can\'t find an svg element');
+  }
+  return el;
+}
+
+function getFilename(el, filename, ext) {
+  if (!filename || filename === '') {
+    filename = (el.getAttribute('title') || 'untitled') + '.' + ext;
+  }
+  return encodeURI(filename);
+}
+
 var SvgSaver = (function () {
 
   /**
@@ -463,11 +489,12 @@ var SvgSaver = (function () {
   }, {
     key: 'getUri',
     value: function getUri(el) {
-      var html = this.getHTML(el);
+      var html = encodeURIComponent(this.getHTML(el));
       if (isDefined(window.btoa)) {
-        return 'data:image/svg+xml;base64,' + window.btoa(html);
+        // see http://stackoverflow.com/questions/23223718/failed-to-execute-btoa-on-window-the-string-to-be-encoded-contains-characte
+        return 'data:image/svg+xml;base64,' + window.btoa(unescape(html));
       }
-      return 'data:image/svg+xml,' + encodeURIComponent(html);
+      return 'data:image/svg+xml,' + html;
     }
 
     /**
@@ -509,28 +536,6 @@ var SvgSaver = (function () {
 
   return SvgSaver;
 })();
-
-function getSvg(el) {
-  if (isUndefined(el) || el === '') {
-    el = document.body.querySelector('svg');
-  } else if (typeof el === 'string') {
-    el = document.body.querySelector(el);
-  }
-  if (el && el.tagName !== 'svg') {
-    el = el.querySelector('svg');
-  }
-  if (!isNode(el)) {
-    throw new Error('svgsaver: Can\'t find an svg element');
-  }
-  return el;
-}
-
-function getFilename(el, filename, ext) {
-  if (!filename || filename === '') {
-    filename = (el.getAttribute('title') || 'untitled') + '.' + ext;
-  }
-  return encodeURI(filename);
-}
 
 exports['default'] = SvgSaver;
 module.exports = exports['default'];
