@@ -14,9 +14,10 @@
     "browserify": "browserify ./lib/angular-downloadsvg-directive.js -o angular-downloadsvg-directive.js",
     "uglify": "uglifyjs angular-downloadsvg-directive.js -o angular-downloadsvg-directive.min.js",
     "build": "npm run browserify && npm run uglify && grunt ngdocs",
-    "lint": "semistandard ./lib/",
+    "lint": "xo ./lib/",
     "start": "npm run build && grunt serve",
-    "check": "npm run lint && dependency-check package.json --entry lib/angular-downloadsvg-directive.js"
+    "check": "npm run lint && dependency-check package.json --entry lib/angular-downloadsvg-directive.js",
+    "version": "chg release -y && git add -A CHANGELOG.md"
   },
   "repository": {
     "type": "git",
@@ -29,15 +30,16 @@
   },
   "homepage": "https://github.com/Hypercubed/angular-downloadsvg-directive",
   "devDependencies": {
-    "browserify": "^11.2.0",
+    "browserify": "^13.1.0",
+    "chg": "^0.3.2",
     "dependency-check": "^2.5.1",
-    "grunt": "^0.4.4",
-    "grunt-bump": "0.0.13",
-    "grunt-contrib-connect": "^0.8.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-gh-pages": "^0.9.1",
+    "grunt": "^1.0.1",
+    "grunt-bump": "^0.8.0",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-gh-pages": "^2.0.0",
     "grunt-ngdocs": "^0.2.5",
-    "load-grunt-tasks": "^0.4.0",
+    "load-grunt-tasks": "^3.5.2",
     "uglifyjs": "^2.4.10",
     "xo": "^0.16.0"
   },
