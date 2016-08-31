@@ -38,10 +38,34 @@
     "grunt-gh-pages": "^0.9.1",
     "grunt-ngdocs": "^0.2.5",
     "load-grunt-tasks": "^0.4.0",
-    "semistandard": "^7.0.2",
-    "uglifyjs": "^2.4.10"
+    "uglifyjs": "^2.4.10",
+    "xo": "^0.16.0"
   },
   "dependencies": {
     "svgsaver": "^0.6.1"
+  },
+  "xo": {
+    "semicolon": true,
+    "esnext": false,
+    "space": 2,
+    "envs": [
+      "node",
+      "browser"
+    ],
+    "plugins": [],
+    "rules": {
+      "space-before-function-paren": [
+        2,
+        {
+          "anonymous": "always",
+          "named": "always"
+        }
+      ],
+      "ava/no-skip-test": 0,
+      "ava/no-ignored-test-files": 0,
+      "ava/test-ended": 0,
+      "ava/use-t-well": 0,
+      "ava/no-unknown-modifiers": 0
+    }
   }
 }

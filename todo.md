@@ -6,6 +6,6 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [ ] grunt -> gulp or npm scripts
 - [ ] Update docs to highlight svgsaver
 - [ ] Include compatibility matrix and links to FileSaver
-- [ ] FileSaver is optional
+- [x] FileSaver is optional
 - [ ] Add service to jsdocs
 - [ ] Add installation to jsdocs
