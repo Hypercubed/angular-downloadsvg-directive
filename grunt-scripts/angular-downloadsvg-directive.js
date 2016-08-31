@@ -13,30 +13,47 @@
 var SvgSaver = require('svgsaver');
 
 angular.module('hc.downloader', [])
-.factory('svgDownload', ['$log', function ($log) {
+.factory('svgDownload', ['$log', '$rootScope', '$q', function ($log, $rootScope, $q) {
   var svgSaver = new SvgSaver();
 
-  return function (el) {
-    if (angular.isString(el) && el.charAt(0) !== '<') {
-      el = document.querySelector(el);
-    }
-
-    var svg = angular.element(el);
-
-    if (svg.prop('tagName') !== 'svg') {
-      svg = svg.find('svg');
-    }
-
-    if (svg.length < 1) {
-      $log.warn('svgDownload Error: Element ' + el + ' not found');
-      return null;
-    }
-
+  return function (svg) {
     return {
-      getHtml: function () { return svgSaver.getHTML(svg[0]); },
-      getBlob: function () { return svgSaver.getBlob(svg[0]); },
-      asSvg: function (filename) { return svgSaver.asSvg(svg[0], filename); },
-      asPng: function (filename) { return svgSaver.asPng(svg[0], filename); }
+      getHtml: function () {
+        return svgSaver.getHTML(svg);
+      },
+      getBlob: function () {
+        return svgSaver.getBlob(svg);
+      },
+      asSvg: function (filename) {
+        return $q(function (resolve, reject) {
+          $log.debug('hc.downloader asSvg', filename);
+          $rootScope.$emit('$svgSaver:start', filename);
+          setTimeout(function () {
+            try {
+              resolve(svgSaver.asSvg(svg, filename));
+              $rootScope.$emit('$svgSaver:end', filename);
+            } catch (err) {
+              $rootScope.$emit('$svgSaver:error', filename);
+              reject(err);
+            }
+          });
+        });
+      },
+      asPng: function (filename) {
+        return $q(function (resolve, reject) {
+          $log.debug('hc.downloader asSvg', filename);
+          $rootScope.$emit('$svgSaver:start', filename);
+          setTimeout(function () {
+            try {
+              resolve(svgSaver.asPng(svg, filename));
+              $rootScope.$emit('$svgSaver:end', filename);
+            } catch (err) {
+              $rootScope.$emit('$svgSaver:error', filename);
+              reject(err);
+            }
+          });
+        });
+      }
     };
   };
 }])
@@ -51,8 +68,8 @@ angular.module('hc.downloader', [])
  * AngularJS directive to download an SVG element as an SVG file.
  *
  * @param {string} svg-download The source element to download.  If blank uses the first svg in the body.
- * @param {string=} filename Name of resaulting svg file.  If blank uses title or 'untitled.svg'
- * @param {string} [type='svg'] Type of file to download (svg or png)
+ * @param {string=} filename Basename of file to save.  If blank uses svg element title or 'untitled'
+ * @param {string=} [type='svg'] Type of file to download (svg or png)
  *
  * @example
 
@@ -100,17 +117,21 @@ angular.module('hc.downloader', [])
   return {
     restrict: 'A',
     link: function (scope, element, attrs) {
-      element.on('click', download);
-
-      function download () {
+      element.on('click', function download () {
         var ext = attrs.type || 'svg';
-        var filename = encodeURI(attrs.filename || attrs.title || 'untitled') + '.' + ext;
-        var svg = svgDownload(attrs.svgDownload || 'body');
-        if (svg) {
-          if (ext === 'svg') { svg.asSvg(filename); }
-          if (ext === 'png') { svg.asPng(filename); }
+        var filename = attrs.filename || attrs.title;
+        if (filename && filename.indexOf('.' + ext) < 0) {
+          filename += '.' + ext;
         }
-      }
+        var svg = svgDownload(attrs.svgDownload);
+        if (svg) {
+          if (ext === 'svg') {
+            svg.asSvg(filename);
+          } else if (ext === 'png') {
+            svg.asPng(filename);
+          }
+        }
+      });
     }
   };
 }]);
@@ -215,6 +236,20 @@ var isDefined = function isDefined(a) {
 var isUndefined = function isUndefined(a) {
   return typeof a === 'undefined';
 };
+var isObject = function isObject(a) {
+  return a !== null && typeof a === 'object';
+};
+
+// from https://github.com/npm-dom/is-dom/blob/master/index.js
+function isNode(val) {
+  if (!isObject(val)) {
+    return false;
+  }
+  if (isDefined(window) && isObject(window.Node)) {
+    return val instanceof window.Node;
+  }
+  return typeof val.nodeType === 'number' && typeof val.nodeName === 'string';
+}
 
 // detection
 var DownloadAttributeSupport = typeof document !== 'undefined' && 'download' in document.createElement('a');
@@ -224,7 +259,9 @@ function saveUri(uri, name) {
     var dl = document.createElement('a');
     dl.setAttribute('href', uri);
     dl.setAttribute('download', name);
-    dl.click();
+    // firefox doesn't support `.click()`...
+    // from https://github.com/sindresorhus/multi-download/blob/gh-pages/index.js
+    dl.dispatchEvent(new MouseEvent('click'));
     return true;
   } else if (typeof window !== 'undefined') {
     window.open(uri, '_blank', '');
@@ -267,7 +304,7 @@ var _isObject = function _isObject(a) {
 };
 
 // from https://github.com/npm-dom/is-dom/blob/master/index.js
-function isNode(val) {
+function _isNode(val) {
   if (!_isObject(val)) return false;
   if (_isDefined(window) && _isObject(window.Node)) return val instanceof window.Node;
   return 'number' == typeof val.nodeType && 'string' == typeof val.nodeName;
@@ -299,7 +336,7 @@ function computedStyles(node) {
   var target = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
   var styleList = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
 
-  if (!isNode(node)) {
+  if (!_isNode(node)) {
     throw new Error('parameter 1 is not of type \'Element\'');
   }
 
@@ -350,37 +387,39 @@ function cleanAttrs(el, attrs, styles) {
 }
 
 function cleanStyle(tgt, parentStyles) {
-  if (tgt.style) {
-    inheritableAttrs.forEach(function (key) {
-      if (tgt.style[key] === parentStyles[key]) {
-        tgt.style.removeProperty(key);
-      }
-    });
-  }
+  parentStyles = parentStyles || tgt.parentNode.style;
+  inheritableAttrs.forEach(function (key) {
+    if (tgt.style[key] === parentStyles[key]) {
+      tgt.style.removeProperty(key);
+    }
+  });
 }
 
-function walker(attrs, defaultStyles) {
-  return function walk(src, tgt) {
-    if (!tgt.style) return;
-
-    computedStyles(src, tgt.style, defaultStyles);
-
-    var children = src.childNodes;
-    for (var i = 0; i < children.length; i++) {
-      walk(children[i], tgt.childNodes[i]);
-      cleanStyle(tgt.childNodes[i], tgt.style);
-    }
-
-    if (tgt.attributes) {
-      cleanAttrs(tgt, attrs, defaultStyles);
-    }
-  };
+function domWalk(src, tgt, down, up) {
+  down(src, tgt);
+  var children = src.childNodes;
+  for (var i = 0; i < children.length; i++) {
+    domWalk(children[i], tgt.childNodes[i], down, up);
+  }
+  up(src, tgt);
 }
 
 // Clones an SVGElement, copies approprate atttributes and styles.
 function cloneSvg(src, attrs, styles) {
   var clonedSvg = src.cloneNode(true);
-  walker(attrs, styles)(src, clonedSvg);
+
+  domWalk(src, clonedSvg, function (src, tgt) {
+    if (tgt.style) {
+      computedStyles(src, tgt.style, styles);
+    }
+  }, function (src, tgt) {
+    if (tgt.style && tgt.parentNode) {
+      cleanStyle(tgt);
+    }
+    if (tgt.attributes) {
+      cleanAttrs(tgt, attrs, styles);
+    }
+  });
 
   return clonedSvg;
 }
@@ -391,6 +430,28 @@ inheritableAttrs.forEach(function (k) {
     svgStyles[k] = true;
   }
 });
+
+function getSvg(el) {
+  if (isUndefined(el) || el === '') {
+    el = document.body.querySelector('svg');
+  } else if (typeof el === 'string') {
+    el = document.body.querySelector(el);
+  }
+  if (el && el.tagName !== 'svg') {
+    el = el.querySelector('svg');
+  }
+  if (!isNode(el)) {
+    throw new Error('svgsaver: Can\'t find an svg element');
+  }
+  return el;
+}
+
+function getFilename(el, filename, ext) {
+  if (!filename || filename === '') {
+    filename = (el.getAttribute('title') || 'untitled') + '.' + ext;
+  }
+  return encodeURI(filename);
+}
 
 var SvgSaver = (function () {
 
@@ -428,6 +489,7 @@ var SvgSaver = (function () {
   _createClass(SvgSaver, [{
     key: 'getHTML',
     value: function getHTML(el) {
+      el = getSvg(el);
       var svg = cloneSvg(el, this.attrs, this.styles);
 
       svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
@@ -464,11 +526,12 @@ var SvgSaver = (function () {
   }, {
     key: 'getUri',
     value: function getUri(el) {
-      var html = this.getHTML(el);
+      var html = encodeURIComponent(this.getHTML(el));
       if (isDefined(window.btoa)) {
-        return 'data:image/svg+xml;base64,' + window.btoa(html);
+        // see http://stackoverflow.com/questions/23223718/failed-to-execute-btoa-on-window-the-string-to-be-encoded-contains-characte
+        return 'data:image/svg+xml;base64,' + window.btoa(unescape(html));
       }
-      return 'data:image/svg+xml,' + encodeURIComponent(html);
+      return 'data:image/svg+xml,' + html;
     }
 
     /**
@@ -482,10 +545,8 @@ var SvgSaver = (function () {
   }, {
     key: 'asSvg',
     value: function asSvg(el, filename) {
-      if (!filename || filename === '') {
-        filename = el.getAttribute('title');
-        filename = (filename || 'untitled') + '.svg';
-      }
+      el = getSvg(el);
+      filename = getFilename(el, filename, 'svg');
       if (isDefined(window.saveAs) && isFunction(Blob)) {
         return saveAs(this.getBlob(el), filename);
       } else {
@@ -504,10 +565,8 @@ var SvgSaver = (function () {
   }, {
     key: 'asPng',
     value: function asPng(el, filename) {
-      if (!filename || filename === '') {
-        filename = el.getAttribute('title');
-        filename = (filename || 'untitled') + '.png';
-      }
+      el = getSvg(el);
+      filename = getFilename(el, filename, 'png');
       return savePng(this.getUri(el), filename);
     }
   }]);
